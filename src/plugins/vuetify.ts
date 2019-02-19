@@ -5,15 +5,19 @@ import fr from 'vuetify/src/locale/fr';
 
 Vue.use(Vuetify, {
   theme: {
-    primary: '7474BF',
+    primary: '#7474BF',
+    primaryDark: '#5151A4',
+    primaryDark2: '36368E',
     secondary: '#348AC7',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107',
+    darken1: '#757575',
     darken3: '#424242',
     darken4: '#212121',
+    backgroundlight: '#FAFAFA',
   },
   iconfont: 'md',
   lang: {

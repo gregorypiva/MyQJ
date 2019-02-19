@@ -26,8 +26,13 @@ export default class Home extends Vue {
   private background = '';
 
   get getBackground() {
-    const backgroundPages = ['/login', '/register', '/recover'];
-    return (backgroundPages.includes(this.$route.path) === true) ? 'background' : '';
+    const backgroundMidPages = ['/login', '/register', '/recover'];
+    const backgroundShortPages = ['/'];
+    if (backgroundMidPages.includes(this.$route.path) === true) {
+      return 'background';
+    } else if (backgroundShortPages.includes(this.$route.path) === true) {
+      return 'background-short';
+    }
   }
 
   @Watch('$route')
@@ -42,5 +47,13 @@ export default class Home extends Vue {
   background: #7474BF; 
   background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
   background: linear-gradient(to bottom, #348AC7 1%, #7474BF 250px, #FFF 250px);
+  }
+  .background-full {
+    background-color: #FAFAFA;
+  }
+  .background-short {
+    background: #7474BF; 
+    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+    background: linear-gradient(to bottom, #348AC7 1%, #7474BF 76px, #FFF 76px);
   }
 </style>

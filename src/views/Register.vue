@@ -119,10 +119,10 @@ import { mapState, mapActions } from 'vuex';
 // tslint:disable: max-line-length
 export default class Register extends Vue {
   private user = {
-    firstName: 'test',
-    lastName: 'test',
-    username: 'test@test.fr',
-    password: 'testtestok',
+    firstName: '',
+    lastName: '',
+    username: '',
+    password: '',
   };
   private showPassword = false;
   private loader = 'loading';

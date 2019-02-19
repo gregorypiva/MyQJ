@@ -1,9 +1,9 @@
 <template>
   <v-bottom-nav
     :active.sync="bottomNav"
-    :value="true"
+    value="true"
     fixed
-    height="45"
+    height="55"
     class="elevation-0"
     style="border-top: 1px solid #E0E0E0"
     color="#F5F5F5"
@@ -16,7 +16,7 @@
       <span class="caption">Rendez-vous</span>
       <v-icon small>event</v-icon>
     </v-btn>
-
+<!-- 
     <v-btn
       flat
       value="search"
@@ -24,15 +24,15 @@
     >
       <span class="caption">Rechercher</span>
       <v-icon small>search</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <v-btn
       flat
-      value="favorites"
+      value="newticket"
       color="primaryDark"
     >
-      <span class="caption">Favoris</span>
-      <v-icon small>favorite</v-icon>
+      <span class="caption">Nouveau Ticket</span>
+      <v-icon small>add_circle</v-icon>
     </v-btn>
 
     <v-btn 
@@ -46,12 +46,13 @@
   </v-bottom-nav>
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        bottomNav: 'RDV',
-      };
-    },
-  };
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator';
+
+@Component({})
+export default class MenuBottom extends Vue {
+  private bottomNav = 'RDV';
+}
+</script>
+
 </script>
