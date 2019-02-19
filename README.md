@@ -1,4 +1,4 @@
-# iona
+# MyQJ
 
 ## Project setup
 ```
