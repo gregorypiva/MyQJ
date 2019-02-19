@@ -14,22 +14,18 @@ export const router = new Router({
       name: 'home',
       component: Home,
     },
-    { path: '/login', component: Login },
-    { path: '/register', component: Register },
-    { path: '/recover', component: Recover },
+    { path: '/login', component: Login, meta: { publicPages: true } },
+    { path: '/register', component: Register, meta: { publicPages: true } },
+    { path: '/recover', component: Recover, meta: { publicPages: true } },
     { path: '*', redirect: '/' },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/recover'];
-  const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
-
-  if (authRequired && !loggedIn) {
+  if (to.matched.some((record) => !record.meta.publicPages) && !loggedIn) {
     return next('/login');
   }
-
   next();
 });
