@@ -4,6 +4,10 @@
       <router-view></router-view>
       <menuBottom :ShowMenuBottom='getMenuBottom' />
     </v-content>
+    <v-footer class="pa-">
+      <v-spacer></v-spacer>
+      <div>{{config.name}} - Version {{config.version}} &copy; {{ new Date().getFullYear() }}</div>
+    </v-footer>
   </v-app>
 </template>
 
@@ -11,6 +15,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapState, mapActions } from 'vuex';
 import MenuBottom from '@/components/MenuBottom.vue'; // @ is an alias to /src
+import { util } from './_helpers';
 
 @Component({
   components: {
@@ -29,6 +34,7 @@ import MenuBottom from '@/components/MenuBottom.vue'; // @ is an alias to /src
 })
 export default class Home extends Vue {
   private ShowMenuBottom = false;
+  private config = {};
 
   get getBackground() {
     return 'background-' + (this.$route.meta.background || 'short');
@@ -36,6 +42,16 @@ export default class Home extends Vue {
 
   get getMenuBottom() {
     return this.$route.meta.menuBottom;
+  }
+
+  private async mounted() {
+    const requestOptions = util.requestOptions({}, 'GET');
+    try {
+      const response = await fetch(`/api/config`, requestOptions);
+      this.config = await util.handleResponse(response);
+    } catch (e) {
+      this.config = {};
+    }
   }
 
   @Watch('$route')
