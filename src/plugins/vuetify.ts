@@ -5,10 +5,11 @@ import fr from 'vuetify/src/locale/fr';
 
 Vue.use(Vuetify, {
   theme: {
-    primary: '#7474BF',
-    primaryDark: '#5151A4',
-    primaryDark2: '36368E',
-    secondary: '#348AC7',
+    primary: '#0E384D',
+    primaryDark: '#01141D',
+    primaryLight: '#436F84',
+    secondary: '#7A2711',
+    secondaryLight: '#A44A32',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',
@@ -18,6 +19,7 @@ Vue.use(Vuetify, {
     darken3: '#424242',
     darken4: '#212121',
     backgroundlight: '#FAFAFA',
+    darkRed: '#B22222',
   },
   iconfont: 'md',
   lang: {

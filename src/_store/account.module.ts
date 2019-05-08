@@ -4,8 +4,11 @@ import { userService } from '../_services';
 // tslint:disable: no-shadowed-variable
 const user = JSON.parse((localStorage as any).getItem('user'));
 const state = user
-  ? { status: { loggedIn: true }, user }
-  : { status: {}, user: null };
+    ? { status: { loggedIn: true }, user, authorization: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Bearer ' + user.accessToken,
+    }}
+    : { status: {}, user: null, authorization: null };
 
 const actions = {
   login({ dispatch, commit }: any, { username, password }: any) {
@@ -16,8 +19,7 @@ const actions = {
         router.push('/');
       } catch (error) {
         commit('loginFailure', error);
-        dispatch('alert/error', error, { root: true });
-        reject();
+        reject(dispatch('alert/error', error, { root: true }));
       }
     });
   },
@@ -29,13 +31,10 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         await userService.register(user);
-        user = await userService.login(user.username, user.password);
-        commit('registerSuccess', user);
         router.push('/');
       } catch (error) {
         commit('registerFailure', error);
-        dispatch('alert/error', error, { root: true });
-        reject();
+        reject(dispatch('alert/error', error, { root: true }));
       }
     });
   },
@@ -45,18 +44,20 @@ const mutations = {
   loginSuccess(state: any, user: any) {
     state.status = { loggedIn: true };
     state.user = user;
+    state.authorization = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Bearer ' + user.accessToken,
+    };
   },
   loginFailure(state: any) {
     state.status = {};
     state.user = null;
+    state.authorization = null;
   },
   logout(state: any) {
     state.status = {};
     state.user = null;
-  },
-  registerSuccess(state: any, user: any) {
-    state.status = { loggedIn: true };
-    state.user = user;
+    state.authorization = null;
   },
   registerFailure(state: any, error: any) {
     state.status = {};

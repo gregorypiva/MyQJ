@@ -7,8 +7,8 @@ import {store} from './_store';
 Vue.config.productionTip = false;
 
 // setup fake backend
-import { configureFakeBackend } from './_helpers';
-configureFakeBackend();
+// import { configureFakeBackend } from './_helpers';
+// configureFakeBackend();
 
 
 new Vue({

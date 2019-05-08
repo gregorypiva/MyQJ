@@ -84,7 +84,7 @@
               block
               large
               class="elevation-1 mb-3"
-              color="#7474BF"
+              color="secondary"
               :loading="loading"
               :disabled="loading"
               @click="validate"
@@ -107,7 +107,6 @@ import { mapState, mapActions } from 'vuex';
 
 @Component({
   computed: {
-    ...mapState('account', ['status']),
     ...mapState({
       alert: (state) => (state as any).alert,
     }),
@@ -119,10 +118,10 @@ import { mapState, mapActions } from 'vuex';
 // tslint:disable: max-line-length
 export default class Register extends Vue {
   private user = {
-    firstName: '',
-    lastName: '',
-    username: '',
-    password: '',
+    firstName: 'test',
+    lastName: 'test',
+    username: 'gregory@gmail.com',
+    password: 'testtesttest',
   };
   private showPassword = false;
   private loader = 'loading';
@@ -137,12 +136,14 @@ export default class Register extends Vue {
     },
   };
 
-  private validate() {
+  private async validate() {
     if ((this as any).$refs.form.validate()) {
       this.loading = true;
-      (this as any).register((this as any).user).catch((error: any) => {
+      try {
+        const register = await (this as any).register((this as any).user);
+      } catch (e) {
         this.loading = false;
-      });
+      }
     }
   }
 }

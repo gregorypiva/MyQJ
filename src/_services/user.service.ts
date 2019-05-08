@@ -1,4 +1,4 @@
-// import { authHeader } from '../_helpers';
+import { util } from '../_helpers';
 
 export const userService = {
   login,
@@ -7,22 +7,19 @@ export const userService = {
 };
 
 function login(username: string, password: string) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  };
+  const requestOptions = util.requestOptions({ username, password }, 'POST');
 
-  return fetch(`http://localhost:8080/users/authenticate`, requestOptions)
-    .then(handleResponse)
-    .then((user) => {
+  return fetch(`/api/login`, requestOptions)
+    .then(util.handleResponse)
+    .then((user: any) => {
       // login successful if there's a jwt token in the response
-      if (user.token) {
+      if (user.accessToken) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('user', JSON.stringify(user));
+          return user;
+      } else {
+        return Promise.reject('Impossible de se connecter.');
       }
-
-      return user;
     }).catch((error) => Promise.reject(error));
 }
 
@@ -32,28 +29,8 @@ function logout() {
 }
 
 function register(user: any) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user),
-  };
-  return fetch(`http://localhost:8080/users/register`, requestOptions)
-    .then(handleResponse)
+  const requestOptions = util.requestOptions(user, 'POST');
+  return fetch(`/api/register`, requestOptions)
+    .then(util.handleResponse)
     .catch((error) => Promise.reject(error));
-}
-
-function handleResponse(response: any) {
-  return response.text().then((text: any) => {
-      const data = text && JSON.parse(text);
-      if (!response.ok) {
-          if (response.status === 401) {
-              // auto logout if 401 response returned from api
-              logout();
-              location.reload(true);
-          }
-          const error = (data && data.message) || response.statusText;
-          return Promise.reject(error);
-      }
-      return data;
-  }).catch((e: any) => Promise.reject('Erreur de connexion'));
 }

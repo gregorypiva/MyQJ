@@ -2,6 +2,7 @@
   <v-app :class="getBackground">
     <v-content>
       <router-view></router-view>
+      <menuBottom :ShowMenuBottom='getMenuBottom' />
     </v-content>
   </v-app>
 </template>
@@ -9,8 +10,12 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapState, mapActions } from 'vuex';
+import MenuBottom from '@/components/MenuBottom.vue'; // @ is an alias to /src
 
 @Component({
+  components: {
+    MenuBottom,
+  },
   computed: {
     ...mapState({
       alert: (state) => (state as any).alert,
@@ -23,16 +28,14 @@ import { mapState, mapActions } from 'vuex';
   },
 })
 export default class Home extends Vue {
-  private background = '';
+  private ShowMenuBottom = false;
 
   get getBackground() {
-    const backgroundMidPages = ['/login', '/register', '/recover'];
-    const backgroundShortPages = ['/'];
-    if (backgroundMidPages.includes(this.$route.path) === true) {
-      return 'background';
-    } else if (backgroundShortPages.includes(this.$route.path) === true) {
-      return 'background-short';
-    }
+    return 'background-' + (this.$route.meta.background || 'short');
+  }
+
+  get getMenuBottom() {
+    return this.$route.meta.menuBottom;
   }
 
   @Watch('$route')
@@ -43,17 +46,17 @@ export default class Home extends Vue {
 </script>
 
 <style scoped>
-  .background {
-  background: #7474BF; 
-  background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-  background: linear-gradient(to bottom, #348AC7 1%, #7474BF 250px, #FFF 250px);
-  }
   .background-full {
     background-color: #FAFAFA;
   }
-  .background-short {
-    background: #7474BF; 
+  .background-mid {
+    background: #0e384d;
     background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #348AC7 1%, #7474BF 76px, #FFF 76px);
+    background: linear-gradient(to bottom, #01141D 1%,  #022434 250px, #FFF 250px);
+  }
+  .background-short {
+    background: #0e384d; 
+    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+    background: linear-gradient(to bottom, #01141D 1%, #022434 76px, #FFF 76px);
   }
 </style>

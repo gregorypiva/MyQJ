@@ -55,11 +55,12 @@
             block
             large
             class="elevation-1 mb-3"
-            color="#7474BF"
+            color="#7A2711"
+            :dark="!loading"
             @click="validate"
             :loading="loading"
             :disabled="loading"
-          ><span class="white--text">Connexion</span></v-btn>
+          ><span>Connexion</span></v-btn>
         </v-flex>
       </v-layout>
       <v-layout justify-center align-content-center>
@@ -97,9 +98,8 @@ import { mapState, mapActions } from 'vuex';
   },
 })
 export default class Login extends Vue {
-  private username = '';
-  private password = '';
-  private loader = 'loading';
+  private username = 'gregory@gmail.com';
+  private password = 'test';
   private loading = false;
   private valid = true;
   private rules = {
@@ -120,7 +120,7 @@ export default class Login extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
   .custom-loader {
     animation: loader 1s infinite;
     display: flex;

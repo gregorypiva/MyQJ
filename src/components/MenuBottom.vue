@@ -1,7 +1,7 @@
 <template>
   <v-bottom-nav
     :active.sync="bottomNav"
-    value="true"
+    :value="ShowMenuBottom"
     fixed
     height="55"
     class="elevation-0"
@@ -11,7 +11,8 @@
     <v-btn
       flat
       value="RDV"
-      color="primaryDark"
+      color="primary"
+      to="/"
     >
       <span class="caption">Rendez-vous</span>
       <v-icon small>event</v-icon>
@@ -29,7 +30,8 @@
     <v-btn
       flat
       value="newticket"
-      color="primaryDark"
+      color="primary"
+      to="/new"
     >
       <span class="caption">Nouveau Ticket</span>
       <v-icon small>add_circle</v-icon>
@@ -38,7 +40,8 @@
     <v-btn 
       flat
       value="account"
-      color="primaryDark"
+      color="primary"
+      to="/account"
     >
       <span class="caption">Mon Compte</span>
       <v-icon small>settings</v-icon>
@@ -49,9 +52,13 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 
-@Component({})
+@Component({
+  props: {
+    ShowMenuBottom: Boolean,
+  },
+})
 export default class MenuBottom extends Vue {
-  private bottomNav = 'RDV';
+  private bottomNav = '';
 }
 </script>
 

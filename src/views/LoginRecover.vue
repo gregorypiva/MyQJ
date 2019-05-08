@@ -37,7 +37,7 @@
             large
             dark
             class="elevation-1 mb-3"
-            color="#7474BF"
+            color="secondary"
             @click="handleSubmit"
           >Connexion</v-btn>
         </v-flex>
