@@ -16,6 +16,7 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
+  plugins: ['~plugins/vuetify.js'],
   loading: { color: '#3B8070' },
   /*
   ** Build configuration
@@ -33,7 +34,8 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    /*vendor: ['vuetify']*/
   }
 }
 
