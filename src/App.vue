@@ -4,7 +4,7 @@
       <router-view></router-view>
       <menuBottom :ShowMenuBottom='getMenuBottom' />
     </v-content>
-    <v-footer class="pa-">
+    <v-footer class="pa-3">
       <v-spacer></v-spacer>
       <div>{{config.name}} - Version {{config.version}} &copy; {{ new Date().getFullYear() }}</div>
     </v-footer>

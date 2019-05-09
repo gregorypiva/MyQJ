@@ -54,39 +54,7 @@
               :key="index"
               xs12 mt-2
             >
-              <v-card>
-                <v-layout row align-center fill-height>
-                  <v-flex xs2 sm1 ma-2>
-                    <v-card
-                      color="primary"
-                      dark
-                      elevation="1"
-                      min-height="100%"
-                      max-height="100%"
-                    >
-                      <v-card-text class="pt-2 pb-0 text-xs-center">
-                        {{day(element.dem_date)}}
-                      </v-card-text>
-                      <v-card-text class="pt-0 pb-2 text-xs-center">
-                        {{month(element.dem_date)}}
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                  <v-flex xs6>
-                  <v-card-title class="pt-2 pb-0">
-                    <b>Ticket n° {{element.dem_id_demande}}</b>
-                  </v-card-title>
-                  <v-card-text class="pt-2">
-                    {{motif(element.dem_id_motif)}}
-                  </v-card-text>
-                  </v-flex>
-                  <v-flex xs3 align-end justify-end>
-                    <v-btn small outline color="primary"
-                    @click="$router.push(`/ticket/${element.dem_id_demande}`)"
-                    >Voir</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-card>
+              <Ticket :demande="element" :motifs="motifs" />
             </v-flex>
           </v-flex>
         </v-layout>
@@ -120,39 +88,7 @@
               :key="index"
               xs12 mt-2
             >
-              <v-card>
-                <v-layout row align-center fill-height>
-                  <v-flex xs2 sm1 ma-2>
-                    <v-card
-                      color="primary"
-                      dark
-                      elevation="1"
-                      min-height="100%"
-                      max-height="100%"
-                    >
-                      <v-card-text class="pt-2 pb-0 text-xs-center">
-                        {{day(element.dem_date)}}
-                      </v-card-text>
-                      <v-card-text class="pt-0 pb-2 text-xs-center">
-                        {{month(element.dem_date)}}
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                  <v-flex xs6>
-                  <v-card-title class="pt-2 pb-0">
-                    <b>Ticket n° {{element.dem_id_demande}}</b>
-                  </v-card-title>
-                  <v-card-text class="pt-2">
-                    {{motif(element.dem_id_motif)}}
-                  </v-card-text>
-                  </v-flex>
-                  <v-flex xs3 align-end justify-end>
-                    <v-btn small outline color="primary"
-                    @click="$router.push(`/ticket/${element.dem_id_demande}`)"
-                    >Voir</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-card>
+              <Ticket :demande="element" :motifs="motifs" />
             </v-flex>
           </v-flex>
         </v-layout>
@@ -175,10 +111,14 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Ticket from '@/components/Ticket.vue'; // @ is an alias to /src
 import { mapState, mapActions } from 'vuex';
 import { util } from '../_helpers';
 
 @Component({
+  components: {
+    Ticket,
+  },
   computed: {
     ...mapState({
       alert: (state) => (state as any).alert,
@@ -209,21 +149,6 @@ export default class Home extends Vue {
       let tickets: any = await fetch(`/api/ticket/getAll`, requestOptions);
       tickets = await util.handleResponse(tickets);
       return {waiting: tickets.waiting, valide: tickets.valide};
-  }
-
-  private day(value: Date) {
-    const date = new Date(value);
-    return date.getDate();
-  }
-
-  private month(value: Date) {
-    const date = new Date(value);
-    const month = new Intl.DateTimeFormat('fr-FR', { month: 'long'}).format(date);
-    return month.toUpperCase().substr(0, 3);
-  }
-
-  private motif(idMotif: number) {
-    return this.motifs[idMotif - 1].mot_libelle;
   }
 
   private async mounted() {
