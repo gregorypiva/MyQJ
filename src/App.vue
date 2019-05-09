@@ -37,7 +37,7 @@ export default class Home extends Vue {
   private config = {};
 
   get getBackground() {
-    return 'background-' + (this.$route.meta.background || 'short');
+    return (this.$route.meta.background || 'short');
   }
 
   get getMenuBottom() {
@@ -62,6 +62,30 @@ export default class Home extends Vue {
 </script>
 
 <style scoped>
+  .full {
+    background: #0e384d;
+    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+    background: linear-gradient(to bottom, #01141D,  #022434);
+/* background: #4b6cb7;
+background: -webkit-linear-gradient(to top, #182848, #4b6cb7);
+background: linear-gradient(to top, #b0c8f7, #4b6cb7);
+background: #4b6cb7;
+background: -webkit-linear-gradient(to top, #182848, #4b6cb7);
+background: linear-gradient(to top, #182848, #4b6cb7); */
+  }
+
+  .mid {
+    background: #0e384d;
+    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+    background: linear-gradient(to bottom, #022434 1%,  #01141D 250px, #FFF 250px);
+  }
+
+  .short {
+    background: #0e384d;
+    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+    background: linear-gradient(to bottom, #022434 1%,  #01141D 76px, #FFF 76px);
+  }
+
   .background-full {
     background-color: #FAFAFA;
   }

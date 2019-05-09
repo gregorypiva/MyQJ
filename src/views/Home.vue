@@ -156,8 +156,7 @@ export default class Home extends Vue {
       this.motifs = await this.getMotifs();
       this.tickets = await this.getTickets();
     } catch (e) {
-      (this as any).alertError(`Impossible de charger les éléments,
-        Veuillez réessayer.`);
+      (this as any).alertError(e);
     }
   }
 
