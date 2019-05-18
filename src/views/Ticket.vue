@@ -85,12 +85,11 @@ export default class Home extends Vue {
   loading = true;
 
   async mounted() {
-
     // On vérifie que l'url contient bien un paramètre de type number
     if (isNaN(Number(this.$route.params.code)) || Number(this.$route.params.code) === 0) {
       this.$router.push(`/`);
+      return;
     }
-
     this.ticket.code = Number(this.$route.params.code);
 
     try {
@@ -113,12 +112,11 @@ export default class Home extends Vue {
       }
 
       // On récupère l'heure prévu de présentation
-      this.ticket.time = this.ticket.dem_date.getHours()
+      this.ticket.time = (this.ticket.dem_date.getHours() < 10 ? '0' : '')
+        + this.ticket.dem_date.getHours()
         + ':'
-        + (this.ticket.dem_date.getMinutes() !== 0
-            ? this.ticket.dem_date.getMinutes()
-              : this.ticket.dem_date.getMinutes())
-        + '0';
+        + (this.ticket.dem_date.getMinutes() < 10 ? '0' : '')
+        + this.ticket.dem_date.getMinutes();
 
       // Arrêt du loader
       this.loading = false;

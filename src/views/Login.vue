@@ -1,12 +1,12 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation>
-    <v-layout row wrap style="margin-top: 60px" align-center justify-center>
+    <v-layout row wrap style="margin-top: 50px" align-center justify-center>
       <v-flex xs12 text-xs-center mb-5>
         <h1 class="white--text font-weight-light" style="letter-spacing: 5px">
           {{config.name}}
         </h1>
       </v-flex>
-      <v-flex xs12 text-xs-center mb-3 mt-3>
+      <v-flex xs12 text-xs-center mb-4 mt-3>
         <h3 class="white--text font-weight-light">Connexion</h3>
       </v-flex>
       <v-flex xs11>

@@ -38,7 +38,7 @@ import { mapState, mapActions } from 'vuex';
 })
 export default class TicketMenu extends Vue {
 
-  private async deleteDemande(idDemande: number) {
+  async deleteDemande(idDemande: number) {
 
     const requestOptions = util.requestOptions('POST',
     {
@@ -48,7 +48,7 @@ export default class TicketMenu extends Vue {
     try {
       let response = await fetch(`/api/ticket/delete`, requestOptions);
       response = await util.handleResponse(response);
-      this.$router.push(`/ticket/${idDemande}`);
+      this.$router.push(`/ticket/0`);
     } catch (e) {
       (this as any).error(e);
     }
