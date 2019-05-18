@@ -1,4 +1,4 @@
-import { util } from '../_helpers';
+import { util } from '@/services/util';
 
 export const userService = {
   login,
@@ -7,7 +7,7 @@ export const userService = {
 };
 
 function login(username: string, password: string) {
-  const requestOptions = util.requestOptions({ username, password }, 'POST');
+  const requestOptions = util.requestOptions('POST', { username, password });
 
   return fetch(`/api/login`, requestOptions)
     .then(util.handleResponse)
@@ -29,7 +29,7 @@ function logout() {
 }
 
 function register(user: any) {
-  const requestOptions = util.requestOptions(user, 'POST');
+  const requestOptions = util.requestOptions('POST', user);
   return fetch(`/api/register`, requestOptions)
     .then(util.handleResponse)
     .catch((error) => Promise.reject(error));

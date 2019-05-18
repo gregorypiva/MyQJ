@@ -33,7 +33,6 @@
             <v-alert
               :value="true"
               color="error"
-              outline
             >
               <b>{{alert.message}}</b>
             </v-alert>
@@ -51,6 +50,14 @@
             :alt="ticket.dem_id_demande"
           >
         </v-flex>
+        <v-flex xs8 v-if="ticket.dem_statut === 'A'">
+          <v-btn
+            color="error"
+            outline
+            block
+            @click="deleteDemande(ticket.dem_id_demande)"
+          >Annuler ma demande</v-btn>
+        </v-flex>
       </v-layout>
     </v-container>
   </div>
@@ -59,7 +66,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapState, mapActions } from 'vuex';
-import { util } from '../_helpers';
+import { util } from '@/services/util';
+import {Ticket} from '@/interface/Ticket';
 
 @Component({
   computed: {
@@ -73,55 +81,65 @@ import { util } from '../_helpers';
   },
 })
 export default class Home extends Vue {
-  private ticket = {code: 0};
-  private loading = true;
+  ticket: any = {code: 0};
+  loading = true;
 
-  private async mounted() {
+  async mounted() {
+
+    // On vérifie que l'url contient bien un paramètre de type number
     if (isNaN(Number(this.$route.params.code)) || Number(this.$route.params.code) === 0) {
       this.$router.push(`/`);
     }
+
     this.ticket.code = Number(this.$route.params.code);
 
-    // code: this.ticket.code
-    const requestOptions = util.requestOptions({}, 'GET', (this as any).account.authorization);
-
     try {
-      let response = await fetch(`/api/ticket/get?id=${this.ticket.code}`, requestOptions);
-      response = await this.handleResponse(response);
-      if ((response as any).length !== 1) { this.$router.push(`/`); }
-      this.ticket = (response as any)[0];
-      (this.ticket as any).url = 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl='
-        + (this.ticket as any).dem_id_demande
+      // Récupération du ticket
+      const ticket = new Ticket();
+      await ticket.setTicket((this as any).account.authorization, this.ticket.code);
+      this.ticket = ticket.getTicket;
+
+      // Génération du code barre
+      this.ticket.url = 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl='
+        + this.ticket.dem_id_demande
         + '&choe=UTF-8';
-      const date = new Date((this.ticket as any).dem_date);
-      const today = new Date();
-      if (date.toDateString() !== today.toDateString()) {
+
+      // On converti en date
+      this.ticket.dem_date = new Date(this.ticket.dem_date);
+
+      // Si le ticket n'a pas le statut A, considéré comme expiré
+      if (this.ticket.dem_statut !== 'A') {
         (this as any).error('Votre ticket a expiré');
       }
-      (this.ticket as any).time = date.getHours()
+
+      // On récupère l'heure prévu de présentation
+      this.ticket.time = this.ticket.dem_date.getHours()
         + ':'
-        + (date.getMinutes() !== 0 ? date.getMinutes() : date.getMinutes())
+        + (this.ticket.dem_date.getMinutes() !== 0
+            ? this.ticket.dem_date.getMinutes()
+              : this.ticket.dem_date.getMinutes())
         + '0';
+
+      // Arrêt du loader
       this.loading = false;
+
     } catch (e) {
       this.$router.push(`/`);
     }
   }
 
-  private async handleResponse(response: any) {
+  async deleteDemande(idDemande: number) {
+    const requestOptions = util.requestOptions('POST',
+    {
+      idDemande,
+      authorization: 'Bearer ' + (this as any).account.user.accessToken,
+    });
     try {
-      // let error = (data && data.message) || response.statusText;
-      const text = await response.text();
-      if (!response.ok) {
-        if (response.status === 404) {
-          return Promise.reject('Erreur lors de la validation, veuillez réessayer');
-        }
-        return Promise.reject(text);
-      }
-      const data = text && JSON.parse(text);
-      return Promise.resolve(data);
+      let response = await fetch(`/api/ticket/delete`, requestOptions);
+      response = await util.handleResponse(response);
+      this.$router.push(`/`);
     } catch (e) {
-      return Promise.reject('Erreur de connexion');
+      (this as any).error(e);
     }
   }
 }

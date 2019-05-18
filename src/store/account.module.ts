@@ -1,5 +1,5 @@
 import { router } from '@/router';
-import { userService } from '../_services';
+import { userService } from '@/services';
 
 // tslint:disable: no-shadowed-variable
 const user = JSON.parse((localStorage as any).getItem('user'));

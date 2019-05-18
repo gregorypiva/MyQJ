@@ -76,7 +76,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapState, mapActions } from 'vuex';
-import { util } from '../_helpers';
+import { util } from '@/services/util';
 
 @Component({
   computed: {
@@ -89,7 +89,7 @@ import { util } from '../_helpers';
     ...mapActions('alert', ['error', 'clear']),
   },
 })
-export default class Home extends Vue {
+export default class NewTicket extends Vue {
 
   private motifs: object = [];
 
@@ -121,47 +121,31 @@ export default class Home extends Vue {
   }
 
   private async mounted() {
-    const requestOptions = util.requestOptions({}, 'GET', (this as any).account.authorization);
+    const requestOptions = util.requestOptions('GET', {}, (this as any).account.authorization);
     let motifs = await fetch(`/api/motif/getAll`, requestOptions);
-    motifs = await this.handleResponse(motifs);
+    motifs = await util.handleResponse(motifs);
     this.motifs = motifs;
   }
 
   private async newTicket() {
     if (this.ticket.motif && this.ticket.type && this.ticket.time) {
       (this as any).clear();
-      const requestOptions = util.requestOptions({
+      const requestOptions = util.requestOptions('POST',
+      {
         demande: {
           motif: this.ticket.motif,
           type: this.ticket.type,
           time: this.ticket.time,
         },
         authorization: 'Bearer ' + (this as any).account.user.accessToken,
-      }, 'POST');
+      });
       try {
         let response = await fetch(`/api/ticket/generate`, requestOptions);
-        response = await this.handleResponse(response);
+        response = await util.handleResponse(response);
         this.$router.push(`/ticket/${(response as any).insertId}`);
       } catch (e) {
         (this as any).error(e);
       }
-    }
-  }
-
-  private async handleResponse(response: any) {
-    try {
-      // let error = (data && data.message) || response.statusText;
-      const text = await response.text();
-      if (!response.ok) {
-        if (response.status === 404) {
-          return Promise.reject('Erreur lors de la validation, veuillez réessayer');
-        }
-        return Promise.reject(text);
-      }
-      const data = text && JSON.parse(text);
-      return Promise.resolve(data);
-    } catch (e) {
-      return Promise.reject('Erreur de connexion');
     }
   }
 }

@@ -2,14 +2,10 @@ import Vue from 'vue';
 import './plugins/vuetify';
 import App from './App.vue';
 import {router} from './router';
-import {store} from './_store';
+import {store} from './store';
+import {config} from './myqj.config';
 
-Vue.config.productionTip = false;
-
-// setup fake backend
-// import { configureFakeBackend } from './_helpers';
-// configureFakeBackend();
-
+Vue.config.productionTip = config.mode === 'production' ? false : true;
 
 new Vue({
   router,

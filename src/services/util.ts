@@ -7,14 +7,8 @@ async function handleResponse(response: any) {
     if (!response.ok) {
       if (response.status === 401) {
         return router.push('/login');
-      } else if (response.status === 400) {
-        return Promise.reject(JSON.parse(text));
-      } else if (response.status === 500) {
-        return Promise.reject('Une erreur technique s\'est produite.');
-      } else if (response.status === 404) {
-        return Promise.reject('Erreur lors du chargement, veuillez réessayer');
       }
-      return Promise.reject(text);
+      return Promise.reject(JSON.parse(text));
     }
     const data = text && JSON.parse(text);
     return Promise.resolve(data);
@@ -23,10 +17,10 @@ async function handleResponse(response: any) {
   }
 }
 
-function requestOptions(body: any, method?: string, headers?: any) {
+function requestOptions(method: string = 'GET', body?: any, headers?: any) {
   const data = method === 'GET' ? null : {body: JSON.stringify(body)};
   return {
-    method: method || 'GET',
+    method,
     headers: headers || { 'Content-Type': 'application/json' },
     ...data,
   };

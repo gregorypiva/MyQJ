@@ -1,56 +1,34 @@
 <template>
-  <v-app :class="getBackground">
-    <v-content>
-      <router-view></router-view>
-      <menuBottom :ShowMenuBottom='getMenuBottom' />
-    </v-content>
-    <v-footer class="pa-3">
-      <v-spacer></v-spacer>
-      <div>{{config.name}} - Version {{config.version}} &copy; {{ new Date().getFullYear() }}</div>
-    </v-footer>
-  </v-app>
+  <Index />
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { mapState, mapActions } from 'vuex';
-import MenuBottom from '@/components/MenuBottom.vue'; // @ is an alias to /src
-import { util } from './_helpers';
+import Index from './views/Index.vue';
+import { mapActions } from 'vuex';
+import { util } from '@/services/util';
 
 @Component({
   components: {
-    MenuBottom,
-  },
-  computed: {
-    ...mapState({
-      alert: (state) => (state as any).alert,
-    }),
+    Index,
   },
   methods: {
     ...mapActions({
+      initConfig: 'config/init',
       clearAlert: 'alert/clear',
     }),
   },
 })
-export default class Home extends Vue {
-  private ShowMenuBottom = false;
-  private config = {};
+export default class App extends Vue {
 
-  get getBackground() {
-    return (this.$route.meta.background || 'short');
-  }
-
-  get getMenuBottom() {
-    return this.$route.meta.menuBottom;
-  }
-
-  private async mounted() {
-    const requestOptions = util.requestOptions({}, 'GET');
+  private async created(): Promise<void> {
     try {
-      const response = await fetch(`/api/config`, requestOptions);
-      this.config = await util.handleResponse(response);
+      const requestOptions = util.requestOptions('GET');
+      let response = await fetch(`/api/config`, requestOptions);
+      response = await util.handleResponse(response);
+      (this as any).initConfig(response);
     } catch (e) {
-      this.config = {};
+      (this as any).initConfig({});
     }
   }
 
@@ -60,43 +38,3 @@ export default class Home extends Vue {
   }
 }
 </script>
-
-<style scoped>
-  .full {
-    background: #0e384d;
-    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #01141D,  #022434);
-/* background: #4b6cb7;
-background: -webkit-linear-gradient(to top, #182848, #4b6cb7);
-background: linear-gradient(to top, #b0c8f7, #4b6cb7);
-background: #4b6cb7;
-background: -webkit-linear-gradient(to top, #182848, #4b6cb7);
-background: linear-gradient(to top, #182848, #4b6cb7); */
-  }
-
-  .mid {
-    background: #0e384d;
-    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #022434 1%,  #01141D 250px, #FFF 250px);
-  }
-
-  .short {
-    background: #0e384d;
-    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #022434 1%,  #01141D 76px, #FFF 76px);
-  }
-
-  .background-full {
-    background-color: #FAFAFA;
-  }
-  .background-mid {
-    background: #0e384d;
-    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #01141D 1%,  #022434 250px, #FFF 250px);
-  }
-  .background-short {
-    background: #0e384d; 
-    background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
-    background: linear-gradient(to bottom, #01141D 1%, #022434 76px, #FFF 76px);
-  }
-</style>
