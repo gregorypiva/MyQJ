@@ -10,11 +10,12 @@
         <v-list-tile :to="`/ticket/${ticket.dem_id_demande}`">
           <v-list-tile-title>Voir le ticket</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile v-if="ticket.dem_statut === 'A'" @click="deleteDemande(ticket.dem_id_demande)">
+        <v-list-tile v-if="ticket.dem_statut === 'A'" @click="dialog = true">
           <v-list-tile-title>Annuler ma demande</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>
+    <TicketDeleteConfirm :ticket="ticket" :dialog="dialog" @confirmation="deleteConfirm()" />
   </v-flex>
 </template>
 
@@ -22,36 +23,22 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { util } from '@/services/util';
 import { mapState, mapActions } from 'vuex';
+import TicketDeleteConfirm from '@/components/TicketDeleteConfirm.vue';
 
 @Component({
+  components: {
+    TicketDeleteConfirm,
+  },
   props: {
     ticket: Object,
   },
-  computed: {
-    ...mapState({
-      account: (state) => (state as any).account,
-    }),
-  },
   methods: {
-    ...mapActions('alert', ['error']),
+    deleteConfirm() {
+      (this as any).dialog = false;
+    },
   },
 })
 export default class TicketMenu extends Vue {
-
-  async deleteDemande(idDemande: number) {
-
-    const requestOptions = util.requestOptions('POST',
-    {
-      idDemande,
-      authorization: 'Bearer ' + (this as any).account.user.accessToken,
-    });
-    try {
-      let response = await fetch(`/api/ticket/delete`, requestOptions);
-      response = await util.handleResponse(response);
-      this.$router.push(`/ticket/0`);
-    } catch (e) {
-      (this as any).error(e);
-    }
-  }
+  dialog: boolean = false;
 }
 </script>

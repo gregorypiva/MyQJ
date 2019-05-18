@@ -55,11 +55,12 @@
             color="error"
             outline
             block
-            @click="deleteDemande(ticket.dem_id_demande)"
+            @click="dialog = true"
           >Annuler ma demande</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
+    <TicketDeleteConfirm :ticket="ticket" :dialog="dialog" @confirmation="deleteConfirm()" />
   </div>
 </template>
 
@@ -68,8 +69,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapState, mapActions } from 'vuex';
 import { util } from '@/services/util';
 import {Ticket} from '@/interface/Ticket';
+import TicketDeleteConfirm from '@/components/TicketDeleteConfirm.vue';
 
 @Component({
+  components: {
+    TicketDeleteConfirm,
+  },
   computed: {
     ...mapState({
       alert: (state) => (state as any).alert,
@@ -78,11 +83,15 @@ import {Ticket} from '@/interface/Ticket';
   },
   methods: {
     ...mapActions('alert', ['error']),
+    deleteConfirm() {
+      (this as any).dialog = false;
+    },
   },
 })
 export default class Home extends Vue {
   ticket: any = {code: 0};
   loading = true;
+  dialog: boolean = false;
 
   async mounted() {
     // On vérifie que l'url contient bien un paramètre de type number
@@ -123,21 +132,6 @@ export default class Home extends Vue {
 
     } catch (e) {
       this.$router.push(`/`);
-    }
-  }
-
-  async deleteDemande(idDemande: number) {
-    const requestOptions = util.requestOptions('POST',
-    {
-      idDemande,
-      authorization: 'Bearer ' + (this as any).account.user.accessToken,
-    });
-    try {
-      let response = await fetch(`/api/ticket/delete`, requestOptions);
-      response = await util.handleResponse(response);
-      this.$router.push(`/`);
-    } catch (e) {
-      (this as any).error(e);
     }
   }
 }

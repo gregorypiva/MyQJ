@@ -6,6 +6,7 @@ import Ticket from './views/Ticket.vue';
 import NewTicket from './views/NewTicket.vue';
 import Account from './views/Account.vue';
 import Register from './views/Register.vue';
+import Reload from './views/Reload.vue';
 
 Vue.use(Router);
 
@@ -45,6 +46,7 @@ export const router = new Router({
     },
     { path: '/login', name: 'login', component: Login, meta: { publicPages: true, background: 'mid' } },
     { path: '/register', name: 'register', component: Register, meta: { publicPages: true, background: 'mid' } },
+    { path: '/reload', name: 'reload', component: Reload },
     { path: '*', redirect: '/' },
   ],
 });
