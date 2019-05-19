@@ -19,7 +19,7 @@
       </v-flex>
       <v-flex xs10 align-self-start>
       <v-card-title class="pt-2 pb-0">
-        <b>Ticket n° {{ticket.dem_id_demande}}</b>
+        <b>Ticket n° {{ticket.dem_numticket}}</b>
       </v-card-title>
       <v-card-text class="pt-2">
         {{motif(ticket.dem_id_motif)}}

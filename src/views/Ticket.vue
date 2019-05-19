@@ -25,7 +25,7 @@
         </v-flex>
         <v-flex xs8 text-xs-center>
           <v-card dark color="primaryLight">
-            <v-card-text class="px-0"><b>Ticket n° {{ticket.dem_id_demande}}</b></v-card-text>
+            <v-card-text class="px-0"><b>Ticket n° {{ticket.dem_numticket}}</b></v-card-text>
           </v-card>
         </v-flex>
         <v-flex xs8 text-xs-center class="mt-3">
