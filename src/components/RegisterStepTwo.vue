@@ -2,7 +2,10 @@
   <v-layout row wrap align-center justify-center>
     <v-flex xs12>
       <v-select
-        :items="['Homme', 'Femme']"
+        :items="sexeItems"
+        :items-text="text"
+        :items-value="value"
+        v-model="user.sexe"
         label="Sexe"
         name="sexe"
         :rules="[rules.required]"
@@ -11,7 +14,10 @@
     </v-flex>
     <v-flex xs6>
       <v-select
-        :items="Array.from(Array(180).keys()).map(i => (i + 40) + ' cm')"
+        :items="sizeItems"
+        :items-text="text"
+        :items-value="value"
+        v-model="user.size"
         label="Taille"
         name="size"
         :rules="[rules.requiredShort]"
@@ -20,7 +26,10 @@
     </v-flex>
     <v-flex xs6>
       <v-select
-        :items="Array.from(Array(180).keys()).map(i => (i + 10) + ' kg')"
+        :items="poidsItems"
+        :items-text="text"
+        :items-value="value"
+        v-model="user.poids"
         label="Poids"
         name="poids"
         :rules="[rules.requiredShort]"
@@ -31,6 +40,7 @@
     <v-flex xs4>
       <v-select
         :items="Array.from(Array(31).keys()).map(i => i + 1)"
+        v-model="user.day"
         label="Jour"
         name="day"
         solo
@@ -39,7 +49,10 @@
     </v-flex>
     <v-flex xs4>
       <v-select
-        :items="['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']"
+        :items="monthItems"
+        :items-text="text"
+        :item-value="value"
+        v-model="user.month"
         label="Mois"
         name="month"
         solo
@@ -49,6 +62,7 @@
     <v-flex xs4>
       <v-select
         :items="Array.from(Array(101).keys()).map(i => (new Date().getFullYear()-100) + i)"
+        v-model="user.year"
         label="Année"
         name="year"
         solo
@@ -57,6 +71,7 @@
     </v-flex>
     <v-flex xs12>
       <v-text-field
+        v-model="user.adress"
         label="Adresse"
         name="adress"
         clearable
@@ -67,6 +82,7 @@
     </v-flex>
     <v-flex xs5>
       <v-text-field
+        v-model="user.cp"
         label="CP"
         name="cp"
         clearable
@@ -77,6 +93,7 @@
     </v-flex>
     <v-flex xs7>
       <v-text-field
+        v-model="user.city"
         label="Ville"
         name="city"
         clearable
@@ -87,6 +104,7 @@
     </v-flex>
     <v-flex xs12>
       <v-text-field
+        v-model="user.country"
         label="Pays"
         name="country"
         clearable
@@ -97,6 +115,7 @@
     </v-flex>
     <v-flex xs12>
       <v-text-field
+        v-model="user.phone"
         label="Téléphone"
         name="phone"
         clearable
@@ -120,5 +139,45 @@ import {Rules} from '@/services';
 })
 export default class RegisterStepTwo extends Vue {
   rules = Rules;
+
+  sexeItems = [
+    { text: 'Homme', value: 'H' },
+    { text: 'Femme', value: 'F' },
+  ];
+
+  sizeIitems = [
+    { text: 'Homme', value: 'H' },
+  ];
+
+  monthItems = [
+    { text: 'Janvier', value: '01' },
+    { text: 'Février', value: '02' },
+    { text: 'Mars', value: '03' },
+    { text: 'Avril', value: '04' },
+    { text: 'Mai', value: '05' },
+    { text: 'Juin', value: '06' },
+    { text: 'Juillet', value: '07' },
+    { text: 'Août', value: '08' },
+    { text: 'Septembre', value: '09' },
+    { text: 'Octobre', value: '10' },
+    { text: 'Novembre', value: '11' },
+    { text: 'Décembre', value: '12' },
+  ];
+
+  get sizeItem() {
+    const items = [];
+    for (let i = 40; i < 220; i++) {
+      items.push({ text: i + ' cm', value: i });
+    }
+    return items;
+  }
+
+  get poidsItem() {
+    const items = [];
+    for (let i = 10; i < 200; i++) {
+      items.push({ text: i + ' kg', value: i });
+    }
+    return items;
+  }
 }
 </script>

@@ -2,7 +2,7 @@
   <v-layout row wrap align-center justify-center>
     <v-flex xs11>
       <v-text-field
-        v-model="user.lastName"
+        v-model="user.lastname"
         label="Nom"
         name="lastName"
         clearable
@@ -13,7 +13,7 @@
     </v-flex>
     <v-flex xs11>
       <v-text-field
-        v-model="user.firstName"
+        v-model="user.firstname"
         label="Prénom"
         name="firstName"
         clearable

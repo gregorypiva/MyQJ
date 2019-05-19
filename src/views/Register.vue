@@ -91,16 +91,17 @@ import {User} from '@/interface/User';
 
 export default class Register extends Vue {
   private user: User = {
-    firstname: '',
-    lastname: '',
     username: '',
     password: '',
-    sexe: '',
-    size: '',
-    poids: '',
+    firstname: '',
+    lastname: '',
     day: '',
     month: '',
     year: '',
+    sexe: '',
+    size: '',
+    poids: '',
+    adress: '',
     cp: '',
     city: '',
     country: '',
