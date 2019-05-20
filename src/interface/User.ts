@@ -9,6 +9,7 @@ export class User {
   day: string;
   month: string;
   year: string;
+  adress: string;
   cp: string;
   city: string;
   country: string;
